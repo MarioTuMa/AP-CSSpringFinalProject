@@ -1,6 +1,9 @@
 
 
-
+import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 import com.googlecode.lanterna.terminal.Terminal.SGR;
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
@@ -24,25 +27,53 @@ public class FinalProject {
 		}
 	}
 
-	public static int eval(int xcor, int [] coeff){
+	public static int eval(int xcor, ArrayList coeff){
 		int sum = 0;
-		for(int i=0;i<coeff.length;i++){
-			sum = sum + coeff[i] * ((int) Math.pow(xcor,i));
+		for(int i=0;i<coeff.size();i++){
+			sum = sum + (int) coeff.get(i) * ((int) Math.pow(xcor,i));
 		}
 		return sum;
 	}
 
-	public static void graph(Terminal t, int [] coef, int width, int height){
+	public static void graph(Terminal t, ArrayList coef, int width, int height){
 		t.applyBackgroundColor(Terminal.Color.RED);
 
 		for(int i = - width / 2; i < width / 2;i++){
-			int ycor=eval(i,coef);
+			int ycor=eval(i, coef);
 			if(ycor<height/2 && ycor>-height/2){
 				t.moveCursor(i + width / 2, height / 2 - ycor);
 				t.putCharacter(' ');
 			}
 		}
 	}
+	public static void setupEq(Terminal t, ArrayList coef, int width, int height){
+		String eq_string="y="+ (int) coef.get(0);
+		int next_highest_power = coef.size()-1;
+
+		for(int i=1;i<coef.size()-1;i++){
+			if((int) coef.get(i)==1){
+				eq_string=eq_string+"+x^"+i;
+			}
+			else{
+				if((int) coef.get(i)==0){
+
+				}
+				else{
+					if((int) coef.get(i)>0){
+						eq_string=eq_string+"+"+(int) coef.get(i)+"x^"+i;
+					}
+					else{
+						eq_string=eq_string+"+"+(int) coef.get(i)+"x^"+i;
+					}
+				}
+			}
+		}
+		putString(10,5,t,eq_string);
+		putString(10,7,t,"Enter to add x^"+ next_highest_power + " term");
+		t.moveCursor(10,8);
+		putString(12,12,t,"Dimensions:"+width+"x"+height);
+	}
+
 	public static void main(String[] args) {
 
 
@@ -60,8 +91,8 @@ public class FinalProject {
 
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
-		int [] coefficients = {2,-1};
-		int next_highest_power = coefficients.length;
+		ArrayList coefficients = new ArrayList();
+		coefficients.add(1);
 
 		for(int i=0;i<width;i++){
 			terminal.moveCursor(i,height/2);
@@ -86,7 +117,6 @@ public class FinalProject {
 			}
 		}
 		while(running){
-			next_highest_power = coefficients.length;
 			terminal.moveCursor(x,y);
 			terminal.applyBackgroundColor(Terminal.Color.WHITE);
 			terminal.applyForegroundColor(Terminal.Color.BLACK);
@@ -97,26 +127,9 @@ public class FinalProject {
 			terminal.applyBackgroundColor(Terminal.Color.DEFAULT);
 			terminal.applyForegroundColor(Terminal.Color.DEFAULT);
 			terminal.applySGR(Terminal.SGR.RESET_ALL);
-			String eq_string="0=";
-			for(int i=0;i<coefficients.length-1;i++){
-				if(coefficients[i]==1){
-					eq_string=eq_string+"x^"+i+"+ ";
-				}
-				else{
-					eq_string=eq_string+coefficients[i]+"x^"+i+"+";
-				}
-			}
-			if(coefficients[coefficients.length-1]==1){
-				eq_string=eq_string+"x^"+(coefficients.length-1);
-			}
-			else{
-				eq_string=eq_string+coefficients[coefficients.length-1]+"x^"+(coefficients.length-1);
-			}
 
-			putString(10,5,terminal,eq_string);
-			putString(10,7,terminal,"Add x^"+ next_highest_power + " term");
-			terminal.moveCursor(10,8);
-			putString(12,12,terminal,"Dimensions:"+width+"x"+height);
+
+			setupEq(terminal, coefficients, width, height);
 			graph(terminal, coefficients, width, height);
 
 			terminal.applyForegroundColor(Terminal.Color.DEFAULT);
@@ -130,6 +143,20 @@ public class FinalProject {
 
 					terminal.exitPrivateMode();
 					running = false;
+				}
+				if (key.getKind() == Key.Kind.Enter) {
+					coefficients.add(1);
+					setupEq(terminal, coefficients, width, height);
+					graph(terminal, coefficients, width, height);
+
+				}
+				if (key.getKind() == Key.Kind.Backspace) {
+
+					if(coefficients.size()>1){
+						coefficients.remove(coefficients.size()-1);
+						setupEq(terminal, coefficients, width + 10000, height);
+						graph(terminal, coefficients, width + 10000, height);
+					}
 				}
 
 				if (key.getKind() == Key.Kind.ArrowLeft) {
