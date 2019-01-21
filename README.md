@@ -13,4 +13,5 @@ When you are done viewing the graph and one of it's solution, you can hit enter 
 ## Credits
 
 Much of the code I used to start out was from the demo, which I included in the project folder with a few modifications I used for testing
+
 Mr. Kats for showing me how to recursively find polynomial solutions last year
