@@ -273,7 +273,9 @@ public class FinalProject {
 				terminal.applyBackgroundColor(Terminal.Color.DEFAULT);
 				terminal.applyForegroundColor(Terminal.Color.DEFAULT);
 				terminal.applySGR(Terminal.SGR.RESET_ALL);
-				putString(50 ,20,terminal,"hit enter to graph");
+				putString(50 ,22,terminal,"hit enter to graph");
+				putString(50 ,21,terminal,"Use up and down arrows to pick a coefficient to edit");
+				putString(50 ,20,terminal,"Use right and left arrows to modify a coefficient by +/- 1");
 				for(int i = 0; i < coefficients.size(); i ++){
 
 					putString(3 ,3 + 3 * i,terminal,coefficients.get(i).toString());
@@ -326,7 +328,7 @@ public class FinalProject {
 					if (key.getKind() == Key.Kind.ArrowLeft) {
 
 						int power = (y - y % 3)/3 - 1;
-						if(power < coefficients.size()){
+						if(power < coefficients.size() && power > -1){
 							coefficients.set(power,(int) coefficients.get(power) - 1);
 							putString(3 ,3 + 3 * power,terminal,"                                             ");
 						}
@@ -336,9 +338,9 @@ public class FinalProject {
 						}
 					}
 
-					if (key.getKind() == Key.Kind.ArrowRight) {
+					if (key.getKind() == Key.Kind.ArrowRight ) {
 						int power = (y - y % 3)/3 - 1;
-						if(power < coefficients.size()){
+						if(power < coefficients.size() && power > -1){
 							coefficients.set(power,(int) coefficients.get(power) + 1);
 							putString(3 ,3 + 3 * power,terminal,"                                             ");
 						}
@@ -382,7 +384,8 @@ public class FinalProject {
 					if (key.getKind() == Key.Kind.Enter || text_activated) {
 						clear(width,height,terminal);
 						edit_mode = true;
-
+						x = 3;
+						y = 4;
 					}
 					if (key.getKind() == Key.Kind.Backspace) {
 
