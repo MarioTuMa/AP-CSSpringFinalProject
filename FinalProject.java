@@ -273,9 +273,9 @@ public class FinalProject {
 				terminal.applyBackgroundColor(Terminal.Color.DEFAULT);
 				terminal.applyForegroundColor(Terminal.Color.DEFAULT);
 				terminal.applySGR(Terminal.SGR.RESET_ALL);
-				putString(50 ,22,terminal,"hit enter to graph");
-				putString(50 ,21,terminal,"Use up and down arrows to pick a coefficient to edit");
-				putString(50 ,20,terminal,"Use right and left arrows to modify a coefficient by +/- 1");
+				putString(50 ,24,terminal,"HIT ENTER TO GRAPH");
+				putString(50 ,22,terminal,"Use UP and DOWN arrows to pick a coefficient to edit");
+				putString(50 ,20,terminal,"Use RIGHT and LEFT arrows to modify a coefficient by +/- 1");
 				for(int i = 0; i < coefficients.size(); i ++){
 
 					putString(3 ,3 + 3 * i,terminal,coefficients.get(i).toString());
@@ -283,8 +283,8 @@ public class FinalProject {
 						putString(9 ,3 + 3 * i,terminal,"x^" + i);
 					}
 				}
-
-				putString(3 ,3 + 3 * coefficients.size(),terminal,"hit n to add a x ^ " + coefficients.size() + " term");
+				putString(50 ,10,terminal,"MARIO\'S GRAPHING CALCULATOR");
+				putString(3 ,3 + 3 * coefficients.size(),terminal,"HIT N to add a x ^ " + coefficients.size() + " term");
 				putString(3 ,6 + 3 * coefficients.size(),terminal,"X domain is -"+xzoom+" to "+xzoom);
 
 				Key key = terminal.readInput();
